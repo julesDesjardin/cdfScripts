@@ -21,7 +21,7 @@ while chosenEvent not in events:
     print('Mauvais format, recommencez')
     chosenEvent = input()
 
-with urllib.request.urlopen("https://www.worldcubeassociation.org/api/v0/competitions/Nanterre2Folie2026/wcif/public") as url:
+with urllib.request.urlopen("https://www.worldcubeassociation.org/api/v0/competitions/FrenchChampionship2026/wcif/public") as url:
     data = json.loads(url.read().decode())
 
 persons = dict([])
