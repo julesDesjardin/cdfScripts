@@ -94,10 +94,9 @@ def finalTextCallback(message):
     event = messageSplit[0]
     number = int(messageSplit[1])
 
-# 10228
     query = f'''
     query MyQuery {{
-        competition(id: "10122") {{
+        competition(id: "10228") {{
             competitionEvents {{
                 event {{
                     id
