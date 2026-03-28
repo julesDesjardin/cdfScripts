@@ -6,6 +6,7 @@ events = {
     '222': 3,
     '444': 3,
     '555': 2,
+    '333bf': 2,
     '333oh': 3,
     'clock': 2,
     'minx': 2,
@@ -13,6 +14,14 @@ events = {
     'skewb': 3,
     'sq1': 2
 }
+
+def getReadableResult(result):
+    output = ''
+    if (result >= 6000):
+        output = output + f'{int(result / 6000)}:'
+    result = result % 6000
+    output = output + f'{int(result / 100):02}.{result % 100:02}'
+    return output
 
 print('Quel event ? Formats acceptés:')
 print(events.keys())
@@ -37,10 +46,14 @@ for event in data['events']:
         continue
     for result in event['rounds'][events[chosenEvent] - 2]['results']:
         (name, country) = persons[f"{result['personId']}"]
-        if country == 'FR':
-            compFr.append(name)
+        if chosenEvent == '333bf':
+            entry = (name, getReadableResult(result['best']))
         else:
-            compEtranger.append(name)
+            entry = (name, getReadableResult(result['average']))
+        if country == 'FR':
+            compFr.append(entry)
+        else:
+            compEtranger.append(entry)
         if len(compFr) == 12:
             break
 
@@ -48,11 +61,11 @@ with open('outputs/Recap.txt', 'w', encoding='utf-8') as outFile:
     outFile.write(f'{chosenEvent}\n\n\n')
     outFile.write(f'{len(compFr) + len(compEtranger)} compétiteurs au total\n\n')
     if len(compEtranger) > 12:
-        outFile.write(f'ATTENTION PLUS DE 12 ETRANGERS.{", ".join(compEtranger[12:])} ne seront pas comptabilisés, à rajouter après.\n')
+        outFile.write(f'ATTENTION PLUS DE 12 ETRANGERS.{", ".join([comp[1] for comp in compEtranger[12:]])} ne seront pas comptabilisés, à rajouter après.\n')
         compEtranger = compEtranger[:12]
     else:
         while len(compEtranger) < 12:
-            compEtranger.append('')
+            compEtranger.append(('', ''))
     vert = [
         compFr[7],
         compFr[5],
@@ -83,8 +96,17 @@ with open('outputs/Recap.txt', 'w', encoding='utf-8') as outFile:
     ]
     outFile.write('Zone verte / Green zone:\n')
     for i in range(12):
-        outFile.write(f'{i+1}. {vert[i]}\n')
+        outFile.write(f'{i+1}. {vert[i][0]}\n')
     outFile.write('\n')
     outFile.write('Zone violette / Purple zone:\n')
     for i in range(12):
-        outFile.write(f'{i+1}. {violet[i]}\n')
+        outFile.write(f'{i+1}. {violet[i][0]}\n')
+
+    outFile.write('\nPrésentation :\n')
+    outFile.write('Etrangers :\n')
+    for i in range(11,-1,-1):
+        if compEtranger[i][0] != '':
+            outFile.write(f'{compEtranger[i][0]} ({compEtranger[i][1]})\n')
+    outFile.write('Francais :\n')
+    for i in range(11,-1,-1):
+        outFile.write(f'{i+1}. {compFr[i][0]} ({compFr[i][1]})\n')
