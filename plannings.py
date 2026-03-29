@@ -83,5 +83,13 @@ for person in sorted(data['persons'], key=lambda x: x['name']):
         for activity in activities[id]:
             commands.append(f'genAssignment("{person["name"]}", "{activity}", "{roomActivity[id]}", "{colorActivity[id]}", "{task}")')
 
+commands.append('createCompetitor("Laurent Reynaud")')
+commands.append('createCompetitor("Tifenn Le Roy")')
+commands.append(f'genAssignment("Tifenn Le Roy", "Skewb R1 - G3", "main", "{colors["Main Green"]}", "Acc")')
+commands.append(f'genAssignment("Tifenn Le Roy", "Skewb R1 - G4", "main", "{colors["Main Green"]}", "Acc")')
+commands.append(f'genAssignment("Tifenn Le Roy", "Pyra R2 - G2", "main", "{colors["Main Green"]}", "Acc")')
+commands.append(f'genAssignment("Tifenn Le Roy", "OH R2 - G1", "main", "{colors["Main Green"]}", "Acc")')
+commands.append(f'genAssignment("Tifenn Le Roy", "OH R2 - G2", "main", "{colors["Main Green"]}", "Acc")')
+commands.append(f'genAssignment("Tifenn Le Roy", "3x3 R1 - G4", "main", "{colors["Main Green"]}", "Acc")')
 with open('outputs/plannings.txt', 'w', encoding='utf-8') as outFile:
     outFile.write("\n".join(commands))

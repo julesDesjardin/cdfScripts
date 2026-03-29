@@ -29,11 +29,14 @@ def generateNametag(templateName, name, country, registrantId):
     img = Image.open(templateName).convert("RGBA")
     draw = ImageDraw.Draw(img)
 
-    if country == 'FR':
-        text = name.upper()
+    if name == 'Artūrs Jakovļevs':
+        text = 'Arturs Jakovlevs'
+    elif name == 'Kryštof Basl':
+        text = 'Krystof Basl'
     else:
-        text = name
-    font_path = "../inglobal/inglobal.ttf"
+        text = name.split('(')[0]
+    print(text)
+    font_path = "./inglobal/inglobal.ttf"
 
     # Define the area the text must fit into
     area_width = 1000
@@ -57,7 +60,7 @@ def generateNametag(templateName, name, country, registrantId):
     draw.text((x, y), text, font=font, fill=(0, 0, 0, 255))
 
     # QRCodes
-    font_path = '../biolinum/LinBiolinum_R.ttf'
+    font_path = './biolinum/LinBiolinum_R.ttf'
 
     text = 'Résultats'
     font = ImageFont.truetype(font_path, 80)
@@ -86,18 +89,19 @@ def generateNametag(templateName, name, country, registrantId):
 
     img.paste(insert, (350, 1900), insert)
 
-    url = "https://api.qrserver.com/v1/create-qr-code/"
-    params = {
-        "size": "300x300",
-        "data": f"https://www.competitiongroups.com/competitions/FrenchChampionship2026/persons/{registrantId}",
-        "bgcolor": "FFF7EA"
-    }
+    if registrantId != 0:
+        url = "https://api.qrserver.com/v1/create-qr-code/"
+        params = {
+            "size": "300x300",
+            "data": f"https://www.competitiongroups.com/competitions/FrenchChampionship2026/persons/{registrantId}",
+            "bgcolor": "FFF7EA"
+        }
 
-    response = requests.get(url, params=params)
+        response = requests.get(url, params=params)
 
-    qr_img = Image.open(BytesIO(response.content)).convert("RGBA")
+        qr_img = Image.open(BytesIO(response.content)).convert("RGBA")
 
-    img.paste(qr_img, (1098, 1900), qr_img)
+        img.paste(qr_img, (1098, 1900), qr_img)
 
     url = f"https://flagcdn.com/w320/{country.lower()}.png"
 
@@ -111,7 +115,6 @@ def generateNametag(templateName, name, country, registrantId):
 
     img.paste(flag, ((img_width - flag_width) // 2, 980 - flag_height // 2), flag)
 
-    img.save('output.png')
     return img
 
 
@@ -132,15 +135,10 @@ orgas = ['2015CLEM03', '2019TOMM01', '2022MORE12', '2023BERN08', '2016ANSE02',
          '2022CHAN39', '2014LAFO02', '2010DESJ01', '2014MALI04', '2010ESTU01', '2015REYN07']
 delegates = ['2023BERN08', '2016ANSE02', '2014LAFO02', '2010DESJ01', '2014LAFO01', '2014GARC27', '2009BONN01',
              '2021RUTH02', '2008PIAU01', '2015LUCI02', '2018NEVE02', '2016FARR02', '2014BEGU01', '2024BERN05', '2018AUBR01']
-testIds = ['Abdelhak Kaddour', 'Adrien Neveu', 'Anthony Kalaya Rush', 'Artūrs Jakovļevs', 'Badr Ait Belaid', 'Baptiste Bery', 'Basile Chandon', 'Bosco de Saignes',
-           'Cedric Pouch', 'Charles Daloz-Baltenberger', 'Clara Lafourcade', 'Clément Valot', 'Daniel Marcelino', 'Dario Tommasi', 'Dhruva Sai Meruva', 'Diego Alfonso']
 
 templates = []
 images = []
 for person in data['persons']:
-    if person['name'] not in testIds:
-        continue
-
     wcaid = person['wcaId']
     if wcaid is None:
         templates.append(('Compétieur_1compoumoins_pas_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
@@ -153,9 +151,9 @@ for person in data['persons']:
         continue
     if wcaid in delegates:
         if wcaid in adherents:
-            templates.append(('Orga_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
+            templates.append(('Délégué_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
         else:
-            templates.append(('Orga_pas_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
+            templates.append(('Délégué_pas_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
         continue
     count = compCount[wcaid]
     if count == 1:
@@ -176,8 +174,10 @@ for person in data['persons']:
         templates.append(('Compétieur_pas_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
     continue
 
-print(templates)
 templates.sort(key=lambda x: x[1])
+templates.append(('Orga_pas_AFS.png', 'Laurent Reynaud', 'FR', 0))
+templates.append(('Orga_pas_AFS.png', 'Tifenn Le Roy', 'FR', 0))
+
 for (template, name, country, registrantId) in templates:
     images.append(generateNametag(template, name, country, registrantId))
 
@@ -194,26 +194,20 @@ positions = [
 ]
 
 pages = []
-order0 = [2, 3, 0, 1]
-order1 = [1, 0, 3, 2]
+order = [1, 0, 3, 2]
 for i in range(0, len(images), 4):
     page = Image.new("RGB", (PAGE_WIDTH, PAGE_HEIGHT), "white")
     for j in range(4):
-        if i == 0 or i == 8:
-            index = order0[j]
-        else:
-            index = order1[j]
-        if i == 0 or i == 4:
-            angle = 0
-        else:
-            angle = 180
+        index = order[j]
+        if i+index >= len(images):
+            continue
         img = images[i + index]
         # Resize image to fit a quarter of the page
         target_width = PAGE_WIDTH // 2
         target_height = PAGE_HEIGHT // 2
         img_resized = img.resize((target_width, target_height), Image.LANCZOS)
-        img_rotated = img_resized.rotate(angle)
-        page.paste(img_rotated, positions[j], img_rotated)  # respects transparency
+        page.paste(img_resized, positions[j], img_resized)  # respects transparency
+        print(f'{i+j} / {len(images)}')
     pages.append(page)
 
 # Save all pages to a single PDF
