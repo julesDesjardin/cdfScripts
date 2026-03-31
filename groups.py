@@ -19,14 +19,14 @@ events = {
     '555': ('5x5', 2),
     '666': ('6x6', 1),
     '777': ('7x7', 1),
-    '333bf': ('Blind', 2),
+    '333bf': ('3BLD', 2),
     '333fm': ('FMC', 1),
     '333oh': ('OH', 3),
     'clock': ('Clock', 2),
-    'minx': ('Mega', 2),
-    'pyram': ('Pyra', 3),
+    'minx': ('Megaminx', 2),
+    'pyram': ('Pyraminx', 3),
     'skewb': ('Skewb', 3),
-    'sq1': ('Sq-1', 2),
+    'sq1': ('Square-1', 2),
     '444bf': ('4BLD', 1),
     '555bf': ('5BLD', 1),
     '333mbf': ('Multi', 1)
@@ -44,7 +44,7 @@ for activity in data['schedule']['venues'][0]['rooms'][0]['activities']:
             toEnter.append(child)
     for child in toEnter:
         groupsMain.append((child['activityCode'], child['startTime']))
-groupsMain.sort(key=lambda x:x[1])
+groupsMain.sort(key=lambda x: x[1])
 
 for activity in data['schedule']['venues'][0]['rooms'][2]['activities']:
     toEnter = []
@@ -56,10 +56,11 @@ for activity in data['schedule']['venues'][0]['rooms'][2]['activities']:
     for child in toEnter:
         groupsSide.append((child['activityCode'], child['startTime']))
 
-groupsSide.sort(key=lambda x:x[1])
+groupsSide.sort(key=lambda x: x[1])
 
 mainIndex = 0
 sideIndex = 0
+
 
 def getTime(room, index):
     if room == 'main':
@@ -68,6 +69,7 @@ def getTime(room, index):
         timestamp = groupsSide[index][1][11:19]
     heure = int(timestamp[0:2])
     return f'{heure + 2}{timestamp[2:]}'
+
 
 def getText(room, index):
     if room == 'main':
@@ -105,6 +107,7 @@ def getText(room, index):
                     text += f' Round {roundNumber} Group {eventSplit[2][1]}'
     return text
 
+
 def updateEvent(room):
     global mainIndex
     global sideIndex
@@ -134,7 +137,6 @@ def updateEvent(room):
     shutil.copyfile(f'event/{eventId}.png', f'outputs/{imgNext}')
 
 
-        
 def sendUpdate(room):
     if room == 'main':
         index = mainIndex
@@ -143,12 +145,14 @@ def sendUpdate(room):
     bot.send_message(groupId, f'{room} mise à jour : {getText(room, index)}, heure: {getTime(room, index)}')
     bot.send_message(groupId, f'Prochain : {getText(room, index + 1)}, heure: {getTime(room, index + 1)}')
 
+
 @bot.message_handler(commands=['nextmain'])
 def nextMainCallback(_):
     global mainIndex
     mainIndex = mainIndex + 1
     updateEvent('main')
     sendUpdate('main')
+
 
 @bot.message_handler(commands=['nextside'])
 def nextSideCallback(_):
@@ -157,6 +161,7 @@ def nextSideCallback(_):
     updateEvent('side')
     sendUpdate('side')
 
+
 @bot.message_handler(commands=['prevmain'])
 def prevMainCallback(_):
     global mainIndex
@@ -164,12 +169,14 @@ def prevMainCallback(_):
     updateEvent('main')
     sendUpdate('main')
 
+
 @bot.message_handler(commands=['prevside'])
 def prevSideCallback(_):
     global sideIndex
     sideIndex = sideIndex - 1
     updateEvent('side')
     sendUpdate('side')
+
 
 @bot.message_handler(commands=['setmain'])
 def setMainCallback(message):
@@ -179,6 +186,7 @@ def setMainCallback(message):
     updateEvent('main')
     sendUpdate('main')
 
+
 @bot.message_handler(commands=['setside'])
 def setMainCallback(message):
     chosenIndex = int(message.text.removeprefix('/setside '))
@@ -186,6 +194,7 @@ def setMainCallback(message):
     sideIndex = chosenIndex
     updateEvent('side')
     sendUpdate('side')
+
 
 @bot.message_handler(commands=['resetsamedi', 'resetdimanche', 'resetlundi'])
 def resetCallback(message):
@@ -217,11 +226,12 @@ def dingCallback(_):
     playsound('announcement.mp3')
     bot.send_message(groupId, 'Ding fait')
 
+
 threadBot = threading.Thread(target=bot.polling)
 threadBot.daemon = True
 threadBot.start()
 
 bot.send_message(groupId, 'Bot groups prêt')
 
-while(True):
+while (True):
     pass

@@ -27,6 +27,8 @@ for person in data['persons']:
         id = assignment['activityId']
         if f'{id}' in activitiesR1:
             event = activitiesR1[f'{id}']
+            if event == '333fm':
+                continue
             if event in assignsR1:
                 print(f"Duplicate Competitor assignment for {person['name']} in {event}")
             assignsR1[event] = 'toto'
@@ -34,6 +36,8 @@ for person in data['persons']:
     if person['registration'] is None:
         continue
     for event in person['registration']['eventIds']:
+        if event == '333fm':
+            continue
         if event not in assignsR1:
             print(f"Missing assignment for {person['name']} in {event}")
     for event in assignsR1:
