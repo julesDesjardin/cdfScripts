@@ -105,7 +105,7 @@ def generateNametag(templateName, name, country, registrantId):
 
     url = f"https://flagcdn.com/w320/{country.lower()}.png"
 
-    response = requests.get(url, params=params)
+    response = requests.get(url)
 
     flag = Image.open(BytesIO(response.content)).convert("RGBA")
     flag.thumbnail((1000, 100))
