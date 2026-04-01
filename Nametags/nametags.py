@@ -143,6 +143,8 @@ for person in data['persons']:
     if wcaid is None:
         templates.append(('Compétieur_1compoumoins_pas_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
         continue
+    if wcaid == '2015REYN07':
+        continue
     if wcaid in orgas:
         if wcaid in adherents:
             templates.append(('Orga_AFS.png', person['name'], person['countryIso2'], person['registrantId']))
@@ -194,12 +196,12 @@ positions = [
 ]
 
 pages = []
-order = [1, 0, 3, 2]
+order = [0, 2, 1, 3]
 for i in range(0, len(images), 4):
     page = Image.new("RGB", (PAGE_WIDTH, PAGE_HEIGHT), "white")
     for j in range(4):
         index = order[j]
-        if i+index >= len(images):
+        if i + index >= len(images):
             continue
         img = images[i + index]
         # Resize image to fit a quarter of the page
@@ -208,6 +210,7 @@ for i in range(0, len(images), 4):
         img_resized = img.resize((target_width, target_height), Image.LANCZOS)
         page.paste(img_resized, positions[j], img_resized)  # respects transparency
         print(f'{i+j} / {len(images)}')
+    page = page.rotate(90, expand=True)
     pages.append(page)
 
 # Save all pages to a single PDF
