@@ -8,23 +8,33 @@ groupId = keys.ID
 bot = telebot.TeleBot(keys.TOKEN)
 
 teams = [
-    ('Team 1', 'Full name team 1', 'Toto team 1 1', 'Toto team 1 2', 'Toto team 1 3'),
-    ('Team 2', 'Full name team 2', 'Toto team 2 1', 'Toto team 2 2', 'Toto team 2 3'),
-    ('Team 3', 'Full name team 3', 'Toto team 3 1', 'Toto team 3 2', 'Toto team 3 3'),
-    ('Team 4', 'Full name team 4', 'Toto team 4 1', 'Toto team 4 2', 'Toto team 4 3'),
-    ('Team 5', 'Full name team 5', 'Toto team 5 1', 'Toto team 5 2', 'Toto team 5 3'),
-    ('Team 6', 'Full name team 6', 'Toto team 6 1', 'Toto team 6 2', 'Toto team 6 3'),
-    ('Team 7', 'Full name team 7', 'Toto team 7 1', 'Toto team 7 2', 'Toto team 7 3'),
-    ('Team 8', 'Full name team 8', 'Toto team 8 1', 'Toto team 8 2', 'Toto team 8 3'),
-    ('Team 9', 'Full name team 9', 'Toto team 9 1', 'Toto team 9 2', 'Toto team 9 3'),
-    ('Team 10', 'Full name team 10', 'Toto team 10 1', 'Toto team 10 2', 'Toto team 10 3'),
-    ('Team 11', 'Full name team 11', 'Toto team 11 1', 'Toto team 11 2', 'Toto team 11 3'),
-    ('Team 12', 'Full name team 12', 'Toto team 12 1', 'Toto team 12 2', 'Toto team 12 3'),
-    ('Team 13', 'Full name team 13', 'Toto team 13 1', 'Toto team 13 2', 'Toto team 13 3'),
-    ('Team 14', 'Full name team 14', 'Toto team 14 1', 'Toto team 14 2', 'Toto team 14 3'),
-    ('Team 15', 'Full name team 15', 'Toto team 15 1', 'Toto team 15 2', 'Toto team 15 3'),
-    ('Team 16', 'Full name team 16', 'Toto team 16 1', 'Toto team 16 2', 'Toto team 16 3')
+    # ('AuRA 1', 'Auvergne-Rhône-Alpes 1', 'Juliette Sébastien', 'Mathis Luc', 'Simon Eyraud'),
+    # ('Nouvelle-Aq. 1', 'Nouvelle-Aquitaine 1', 'Alexandre Carlier', 'Quentin Rivault', 'Elian Beguec'),
+    # ('IDF 1', 'Île-de-France 1', 'Lucas Déglise', 'Yassine Dammak', 'Joris Arias Capes'),
+    # ('Grand Est 1', 'Grand Est 1', 'Valentin Hoffmann', 'Victor Colin', 'Charles Daloz-Baltenberger'),
+    ('HdF', 'Hauts-de-France', 'Fanny Pousset', 'Victor Wijsman', 'Louis Fertier'),
+    ('PACA', 'Provence-Alpes-Côte d\'Azur', 'Nicolas Gertner Kilian', 'Adrien Neveu', 'Marie Vincent'),
+    ('CVdL', 'Centre-Val de Loire', 'Arthur Garcin', 'Samuel Jehanno', 'Victor Chenu'),
+    # ('BFC 1', 'Bourgogne-Franche-Comté 1', 'Peter Grassard', 'Nils Rödel', 'Gaspard Carré'),
+    ('Bretagne', 'Bretagne', 'Anton Piau', 'Hippolyte Moreau', 'Louis Sarthou'),
+    ('Occitanie', 'Occitanie', 'Manu Dutheil', 'Dorian Thomas', 'Wilfrid Py'),
+    ('Outre-Mer', 'Outre-Mer', 'Étienne Aubry', 'Kévin Ky', 'Mathis Schecroun'),
+    ('Normandie', 'Normandie', 'Adrien Vallée', 'César Essling', 'Maël Tran'),
+    ('PdlL', 'Pays de la Loire', 'Zoé Ruth', 'Louis Presti', 'Kilian Farrell'),
+    ('Corse', 'Corse', 'Jonathan Dammann', 'Manon Bernard', 'Antoine Martini'),
+    # ('IDF 2', 'Île-de-France 2', 'Abdelhak Kaddour', 'Pablo Contreras', 'Louis-Marie Ratto'),
+    # ('Nouvelle-Aq. 2', 'Nouvelle-Aquitaine 2', 'Jean-Charles Tillit', 'Alexis Le Merrer', 'Malo Coraboeuf'),
 ]
+# ('AuRA 2', 'Auvergne-Rhône-Alpes 2', 'Baptiste Bery', 'Sylvain Favier', 'Armand Lemarinier'),
+# ('Grand Est 2', 'Grand Est 2', 'Maxence Baudry', 'Paul Luciw', 'Yannick Beyer'),
+# ('BFC 2', 'Bourgogne-Franche-Comté 2', 'Ylann Vernaton', 'Baptiste Dano', 'Thomas Pianeta'),
+# ('AuRA 3', 'Auvergne-Rhône-Alpes 3', 'Ilona Ansel', 'Noé Bourdon', 'Samuel Dechaume-Moncharmont'),
+# ('IDF 3', 'Île-de-France 3', 'Jaimy Mfoumou', 'Hélie de Palmaert', 'Lev Azaria Doron'),
+# ('Nouvelle-Aq. 3', 'Nouvelle-Aquitaine 3', 'Titouan Rincon', 'Hugo Guillet', 'Florian Bernard'),
+# ('Grand Est 3', 'Grand Est 3', 'Mathis Audibert', 'Nathan Vogel-Brustolin', 'Valentin Moutte'),
+# ('BFC 3', 'Bourgogne-Franche-Comté 3', 'Erwan Pacquentin', 'Melwin Pacquentin', 'Maël Pacquentin'),
+# ('AuRA 4', 'Auvergne-Rhône-Alpes 4', 'Anael Champion', 'Diego Alfonso', 'Virgile Perrot'),
+# ('AuRA 5', 'Auvergne-Rhône-Alpes 5', 'Marianne Faure', 'Marc de Joussineau', 'Maxime Madrzyk'),
 
 R2 = [None, None, None, None, None, None, None, None]
 R3 = [None, None, None, None]
@@ -291,6 +301,15 @@ shutil.copyfile(f'RegionCup/empty.png', f'outputs/Final_down.png')
 
 
 updateTexts()
+
+
+def testrun(side):
+    time.sleep(10)
+    if (side):
+        right(toto('/d 100'))
+    else:
+        left(toto('/g 100'))
+    next(toto(''))
 
 
 while (True):
