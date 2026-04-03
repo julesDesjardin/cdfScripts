@@ -237,10 +237,16 @@ def next(message):
 def left(message):
     global totalLeft
     result = int(message.text.removeprefix('/g '))
-    for i in range(3):
-        if resultsLeft[i] == 0:
-            resultsLeft[i] = result
-            break
+    if result == 0:
+        for i in range(2, -1, -1):
+            if resultsLeft[i] != 0:
+                resultsLeft[i] = 0
+                break
+    else:
+        for i in range(3):
+            if resultsLeft[i] == 0:
+                resultsLeft[i] = result
+                break
     if -1 in resultsLeft:
         totalLeft = -1
     else:
@@ -252,10 +258,16 @@ def left(message):
 def right(message):
     global totalRight
     result = int(message.text.removeprefix('/d '))
-    for i in range(3):
-        if resultsRight[i] == 0:
-            resultsRight[i] = result
-            break
+    if result == 0:
+        for i in range(2, -1, -1):
+            if resultsRight[i] != 0:
+                resultsRight[i] = 0
+                break
+    else:
+        for i in range(3):
+            if resultsRight[i] == 0:
+                resultsRight[i] = result
+                break
     if -1 in resultsRight:
         totalRight = -1
     else:
