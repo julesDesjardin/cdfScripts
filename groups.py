@@ -45,6 +45,8 @@ for activity in data['schedule']['venues'][0]['rooms'][0]['activities']:
     for child in toEnter:
         groupsMain.append((child['activityCode'], child['startTime']))
 groupsMain.sort(key=lambda x: x[1])
+groupsMain.append(('other-end',-1))
+groupsMain.append(('other-end',-1))
 
 for activity in data['schedule']['venues'][0]['rooms'][2]['activities']:
     toEnter = []
@@ -57,6 +59,8 @@ for activity in data['schedule']['venues'][0]['rooms'][2]['activities']:
         groupsSide.append((child['activityCode'], child['startTime']))
 
 groupsSide.sort(key=lambda x: x[1])
+groupsSide.append(('other-end',-1))
+groupsSide.append(('other-end',-1))
 
 mainIndex = 0
 sideIndex = 0
@@ -64,8 +68,12 @@ sideIndex = 0
 
 def getTime(room, index):
     if room == 'main':
+        if groupsMain[index][1]:
+            return ''
         timestamp = groupsMain[index][1][11:19]
     else:
+        if groupsSide[index][1]:
+            return ''
         timestamp = groupsSide[index][1][11:19]
     heure = int(timestamp[0:2])
     return f'{heure + 2}{timestamp[2:]}'
@@ -87,6 +95,8 @@ def getText(room, index):
                 text = 'Coupe de France'
             case 'multi':
                 text = 'Dropoff multi'
+            case 'end':
+                text = ''
     else:
         (eventName, eventRound) = events[eventSplit[0]]
         text = eventName
@@ -94,17 +104,19 @@ def getText(room, index):
             case 'Multiblind':
                 pass
             case 'FMC':
-                text += f' Attempt {eventSplit[2][1]}'
+                text += f'\nAttempt {eventSplit[2][1]}'
             case '6x6' | '7x7':
-                text += f' Final Group {eventSplit[2][1]}'
+                text += f'\nFinal Group {eventSplit[2][1]}'
             case default:
                 roundNumber = int(eventSplit[1][1])
                 if roundNumber == eventRound:
-                    text += f' Final'
-                elif roundNumber == eventRound - 1 and eventRound > 2:
-                    text += f' Semi-Final'
+                    text += f'\nFinal'
+                elif roundNumber == eventRound - 1 and eventRound == 3:
+                    text += f'\nSemi-Final Group {eventSplit[2][1]}'
+                elif roundNumber == eventRound - 1 and eventRound == 4:
+                    text += f'\nSemi-Final'
                 else:
-                    text += f' Round {roundNumber} Group {eventSplit[2][1]}'
+                    text += f'\nRound {roundNumber} Group {eventSplit[2][1]}'
     return text
 
 
